@@ -3,7 +3,6 @@ import { Formik, Form } from "formik";
 import FormikControls from "../Formik/FormikControls";
 import React from "react";
 import {
-  Avatar,
   Modal,
   Button,
   Grid,
@@ -11,14 +10,9 @@ import {
   Typography,
   IconButton,
 } from "@mui/material";
-import { useSelector } from "react-redux";
 import Close from "@mui/icons-material/Close";
 
 const TaskModal = ({ openTask, handleCloseTask }) => {
-  const { email, fullName, imgUrl, department } = useSelector(
-    (state) => state.login
-  );
-
   const style = {
     position: "absolute",
     top: "50%",

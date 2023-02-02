@@ -10,7 +10,6 @@ import {
   Button,
   Tooltip,
   MenuItem,
-  Modal,
   IconButton,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -24,18 +23,6 @@ import TaskModal from "../../Shared/Modals/TaskModal";
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Logout"];
 const adds = ["Task", "Project", "Department"];
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  borderRadius: "16px",
-};
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(false);
@@ -197,11 +184,11 @@ function Navbar() {
               >
                 {adds.map((add) => (
                   <MenuItem key={add} onClick={handleCloseAddMenu}>
-                    {add == "Task" ? (
+                    {add === "Task" ? (
                       <Typography textAlign="center" onClick={handleOpenTask}>
                         {add}
                       </Typography>
-                    ) : add == "Project" ? (
+                    ) : add === "Project" ? (
                       <Typography
                         textAlign="center"
                         onClick={handleOpenProject}
@@ -243,7 +230,7 @@ function Navbar() {
               >
                 {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    {setting == "Profile" ? (
+                    {setting === "Profile" ? (
                       <Typography
                         textAlign="center"
                         onClick={handleOpenProfile}

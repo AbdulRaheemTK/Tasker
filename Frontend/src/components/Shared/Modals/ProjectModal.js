@@ -3,7 +3,6 @@ import { Formik, Form } from "formik";
 import FormikControls from "../../../components/Shared/Formik/FormikControls";
 import React, { useEffect } from "react";
 import {
-  Avatar,
   Modal,
   Button,
   Grid,
@@ -37,7 +36,7 @@ const ProjectModal = ({ openProject, handleCloseProject }) => {
 
   const dispatch = useDispatch();
 
-  const loggedUser = useSelector((state) => state.login);
+  const user = useSelector((state) => state.login);
   const { users } = useSelector((state) => state.home);
 
   const { newProject, projects } = useSelector((state) => state.project);
@@ -52,7 +51,7 @@ const ProjectModal = ({ openProject, handleCloseProject }) => {
 
   useEffect(() => {
     getProjectsDataAPI();
-  }, [newProject, loggedUser]);
+  }, [newProject, user]);
 
   const initialValues = {
     projectName: "",
