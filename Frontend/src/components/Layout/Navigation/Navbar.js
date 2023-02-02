@@ -1,23 +1,25 @@
 import * as React from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Menu,
+  Container,
+  Avatar,
+  Button,
+  Tooltip,
+  MenuItem,
+  Modal,
+  IconButton,
+} from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { Modal } from "@mui/material";
-import ProfileModal from "./ProfileModal";
-import { useSelector } from "react-redux";
 import AddIcon from "@mui/icons-material/Add";
-import TaskModal from "./TaskModel";
-import ProjectModal from "./ProjectModal";
+import { useSelector } from "react-redux";
+import ProfileModal from "../../Shared/Modals/ProfileModal";
+import ProjectModal from "../../Shared/Modals/ProjectModal";
+import TaskModal from "../../Shared/Modals/TaskModal";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Logout"];

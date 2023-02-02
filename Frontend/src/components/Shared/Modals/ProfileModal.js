@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Formik, Form } from "formik";
-import FormikControls from "../../../components/Shared/Formik/FormikControls";
+import FormikControls from "../Formik/FormikControls";
 import React from "react";
 import {
   Avatar,

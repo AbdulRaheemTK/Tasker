@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { Formik, Form } from "formik";
 import FormikControls from "../../../components/Shared/Formik/FormikControls";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Avatar,
   Modal,
@@ -9,22 +9,25 @@ import {
   Grid,
   Box,
   Typography,
+  List,
   IconButton,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import ListItemComponent from "../ListItemComponent";
+import {
+  addProject,
+  getProjects,
+} from "../../../features/Project/ProjectSlice";
 import Close from "@mui/icons-material/Close";
 
-const TaskModal = ({ openTask, handleCloseTask }) => {
-  const { email, fullName, imgUrl, department } = useSelector(
-    (state) => state.login
-  );
-
+const ProjectModal = ({ openProject, handleCloseProject }) => {
   const style = {
     position: "absolute",
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: "40%",
+    height: "90vh",
     bgcolor: "#E8E2E2",
     border: "2px solid #000",
     boxShadow: 24,
@@ -32,36 +35,44 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
     borderRadius: "16px",
   };
 
-  const departmentOptions = [
-    { key: "Select your department", value: "" },
-    { key: "Development", value: "development" },
-    { key: "Testing", value: "testing" },
-    { key: "Marketing", value: "marketing" },
-  ];
+  const dispatch = useDispatch();
+
+  const loggedUser = useSelector((state) => state.login);
+  const { users } = useSelector((state) => state.home);
+
+  const { newProject, projects } = useSelector((state) => state.project);
+
+  const usersOptions = users.map((user) => {
+    return { key: user.fullName, value: user._id };
+  });
+
+  const getProjectsDataAPI = async () => {
+    await dispatch(getProjects());
+  };
+
+  useEffect(() => {
+    getProjectsDataAPI();
+  }, [newProject, loggedUser]);
+
   const initialValues = {
-    taskName: "",
-    videoCall: false,
+    projectName: "",
     allocatedTo: "",
-    project: "",
-    description: "",
-    date: "",
+    dueDate: "",
   };
 
   const validationSchema = yup.object({
-    taskName: yup.string().required("Required!"),
-    videoCall: yup.boolean(),
+    projectName: yup.string().required("Required!"),
     allocatedTo: yup.string().required("Required"),
-    project: yup.string().required("Required"),
-    description: yup.string().required("Required"),
-    date: yup.date().required("Required"),
+    dueDate: yup.date().required("Required"),
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
+    dispatch(addProject(values));
   };
   return (
     <Modal
-      open={openTask}
+      open={openProject}
+      onClose={handleCloseProject}
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
@@ -73,12 +84,12 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
             component="h2"
             sx={{ textAlign: "center", flexGrow: 1 }}
           >
-            New Task
+            New Project
           </Typography>
           <IconButton
             color="error"
             aria-label="Close button"
-            onClick={handleCloseTask}
+            onClick={handleCloseProject}
           >
             <Close />
           </IconButton>
@@ -96,31 +107,21 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
                     marginTop: 2,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
                   }}
                 >
                   <Form>
                     <Grid container spacing={2}>
-                      <Grid item xs={8}>
+                      <Grid item xs={12}>
                         <FormikControls
                           control="TextField"
-                          name="taskName"
-                          id="taskName"
-                          label="Task Name"
+                          name="projectName"
+                          id="projectName"
+                          label="Project Name"
                           type="text"
                           fullWidth
                           variant="filled"
                           size="small"
                           autoFocus
-                        />
-                      </Grid>
-                      <Grid item xs={4} marginTop="5px">
-                        <FormikControls
-                          control="CheckBox"
-                          name="videoCall"
-                          id="videoCall"
-                          label="Video Call"
-                          size="small"
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -130,47 +131,21 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
                           id="allocatedTo"
                           label="For"
                           fullWidth
-                          options={departmentOptions}
+                          options={usersOptions}
                           variant="filled"
                           size="small"
                         />
                       </Grid>
                       <Grid item xs={6}>
                         <FormikControls
-                          control="Select"
-                          name="project"
-                          id="project"
-                          label="Project"
-                          fullWidth
-                          options={departmentOptions}
-                          variant="filled"
-                          size="small"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FormikControls
                           control="TextField"
-                          name="description"
-                          id="description"
-                          label="Description"
-                          type="text"
-                          multiline
-                          rows={4}
-                          fullWidth
-                          size="small"
-                          variant="filled"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FormikControls
-                          control="TextField"
-                          name="date"
-                          id="date"
-                          label="Date"
+                          name="dueDate"
+                          id="dueDate"
+                          label="Due Date"
                           type="date"
                           fullWidth
-                          size="small"
                           variant="filled"
+                          size="small"
                         />
                       </Grid>
                     </Grid>
@@ -180,7 +155,7 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
                         variant="contained"
                         color="success"
                         size="small"
-                        sx={{ mt: 3, mb: 1, width: "25%" }}
+                        sx={{ mt: 1, mb: 1, width: "25%" }}
                         disabled={!formik.isValid}
                       >
                         Add
@@ -192,9 +167,28 @@ const TaskModal = ({ openTask, handleCloseTask }) => {
             );
           }}
         </Formik>
+
+        <List
+          sx={{
+            bgcolor: "lightgray",
+            borderRadius: "10px",
+            padding: "10px",
+          }}
+        >
+          {projects.slice(0, 3).map((project) => {
+            return (
+              <ListItemComponent
+                avatarSource={project.allocatedTo.imgUrl}
+                primaryText={project.projectName}
+                secondaryText={project.allocatedTo.fullName}
+                subSecondaryText={project.dueDate}
+              />
+            );
+          })}
+        </List>
       </Box>
     </Modal>
   );
 };
 
-export default TaskModal;
+export default ProjectModal;
