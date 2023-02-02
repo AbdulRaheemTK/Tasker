@@ -84,17 +84,16 @@ const login = asyncHandler(async (req, res, next) => {
   }
 });
 
-//@description     Fetch logged In User's Data
-//@route           GET /api/user
+//@description     Fetch User's Data
+//@route           GET /api/user/:userId
 //@access          Private
 
 const getUserData = asyncHandler(async (req, res, next) => {
-  //In auth Middleware, we have save the user using the decoded jwt in req.user
-  const user = req.user;
+  const userId = req.params.userId;
   try {
+    const user = await User.findById(userId).select("-password");
     if (user) {
-      res.status(200);
-      res.json(user);
+      res.status(200).json(user);
     }
   } catch (error) {
     res.status(401);

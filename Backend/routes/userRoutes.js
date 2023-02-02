@@ -20,10 +20,10 @@ router.post("/signup", signup);
 //@access          Public
 router.post("/login", login);
 
-//@description     Fetch logged In User's Data
-//@route           GET /api/user
+//@description     Fetch User's Data
+//@route           GET /api/user/:userId
 //@access          Private
-router.get("/", protect, getUserData);
+router.get("/:userId", getUserData);
 
 //@description     Update user's data
 //@route           POST /api/user/updateUser/:userId
