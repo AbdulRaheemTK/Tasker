@@ -15,10 +15,11 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 import AdbIcon from "@mui/icons-material/Adb";
 import AddIcon from "@mui/icons-material/Add";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import ProfileModal from "../../Shared/Modals/ProfileModal";
 import ProjectModal from "../../Shared/Modals/ProjectModal";
 import TaskModal from "../../Shared/Modals/TaskModal";
+import { LoginSliceActions } from "../../../features/Login/LoginSlice";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Profile", "Logout"];
@@ -41,7 +42,13 @@ function Navbar() {
   const handleOpenProject = () => setOpenProject(true);
   const handleCloseProject = () => setOpenProject(false);
 
+  const handleLogout = () => {
+    dispatch(LoginSliceActions.logout());
+  };
+
   const { user } = useSelector((state) => state.login);
+
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = () => {
     setAnchorElNav(true);
@@ -238,7 +245,9 @@ function Navbar() {
                         {setting}
                       </Typography>
                     ) : (
-                      <Typography textAlign="center">{setting}</Typography>
+                      <Typography textAlign="center" onClick={handleLogout}>
+                        {setting}
+                      </Typography>
                     )}
                   </MenuItem>
                 ))}

@@ -49,7 +49,6 @@ function Login() {
       setNotification(user.error.message);
       setnotificationSeverity("error");
     } else {
-      localStorage.setItem("userInfo", JSON.stringify(user.payload.token));
       setNotification("User Logged In Successfully!");
       setnotificationSeverity("success");
       navigate("/");

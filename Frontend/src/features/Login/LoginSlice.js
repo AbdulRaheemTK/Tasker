@@ -3,7 +3,7 @@ import axios from "axios";
 const baseUrl = "http://localhost:3000";
 
 const initialState = {
-  user: JSON.parse(localStorage.getItem("user")),
+  user: JSON.parse(localStorage.getItem("user")) || "",
 };
 
 export const loginRequest = createAsyncThunk(
@@ -46,7 +46,7 @@ const LoginSlice = createSlice({
   initialState,
   reducers: {
     logout: (state) => {
-      state.user = null;
+      state.user = "";
       localStorage.removeItem("user");
     },
   },
